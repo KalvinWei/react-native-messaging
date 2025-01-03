@@ -1,19 +1,18 @@
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { Stack } from "expo-router";
-import { useAppChatContext } from "contexts/app-context";
+import { useChatContext } from "lib/contexts/chat-context";
 import { Channel, Thread } from "stream-chat-expo";
 import { useHeaderHeight } from "@react-navigation/elements";
 
-const ThreadScreen = () => {
-  const { channel, thread, setThread } = useAppChatContext();
+export default function ThreadScreen() {
+  const { channel, thread, setThread } = useChatContext();
   const headerHeight = useHeaderHeight();
 
-  if (channel === undefined) {
+  if (!channel) {
     return (
-      <SafeAreaView>
+      <View>
         <Text>Loading chat</Text>
-      </SafeAreaView>
+      </View>
     );
   }
 
@@ -22,8 +21,7 @@ const ThreadScreen = () => {
   };
 
   return (
-    <SafeAreaView>
-      <Stack.Screen options={{ title: "Thread Screen" }} />
+    <View>
       <Channel
         channel={channel}
         keyboardVerticalOffset={headerHeight}
@@ -34,15 +32,12 @@ const ThreadScreen = () => {
           <Thread onThreadDismount={handleThreadDismount} />
         </View>
       </Channel>
-    </SafeAreaView>
+    </View>
   );
-};
-
-export default ThreadScreen;
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "flex-start",
   },
 });

@@ -1,17 +1,17 @@
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
-import React, { useEffect, useMemo } from "react";
-import { Stack, useRouter } from "expo-router";
+import React, { useEffect } from "react";
+import { useRouter } from "expo-router";
 import {
   Channel,
   MessageInput,
   MessageList,
   useAttachmentPickerContext,
 } from "stream-chat-expo";
-import { useAppChatContext } from "contexts/app-context";
+import { useChatContext } from "lib/contexts/chat-context";
 import { useHeaderHeight } from "@react-navigation/elements";
 
 const ChannelScreen = () => {
-  const { channel, setThread } = useAppChatContext();
+  const { channel, setThread } = useChatContext();
   const { setTopInset } = useAttachmentPickerContext();
   const headerHeight = useHeaderHeight();
   const router = useRouter();
@@ -30,18 +30,17 @@ const ChannelScreen = () => {
 
   const handleThreadSelected = (thread) => {
     setThread(thread);
-    router.push(`/channel/${channel.cid}/thread/${thread.cid}`);
+    router.push(`/messages/channels/${channel.cid}/threads/${thread.cid}`);
   };
 
   return (
     <View style={styles.container}>
-      <Stack.Screen options={{ title: "Channel Screen" }} />
-      {channel ? (
+      {channel && (
         <Channel channel={channel} keyboardVerticalOffset={headerHeight}>
           <MessageList onThreadSelect={handleThreadSelected} />
           <MessageInput />
         </Channel>
-      ) : null}
+      )}
     </View>
   );
 };
@@ -51,5 +50,6 @@ export default ChannelScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "red",
   },
 });
